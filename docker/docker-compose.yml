@@ -80,6 +80,16 @@ services:
         networks:
           - streaming-data-internal
 
+    station-paris-producer:
+        build:
+            context: ../CitibikeApiProducer
+            dockerfile: Dockerfile-station-paris
+        depends_on:
+          - kafka
+          - zookeeper-seed
+        networks:
+          - streaming-data-internal
+
     raw-station-information-data-saver:
         build:
             context: ../RawDataSaver
@@ -123,6 +133,23 @@ services:
           - station-information-producer
           - station-status-producer
           - station-san-francisco-producer
+          - hadoop-seed
+          - zookeeper-seed
+        volumes:
+          - ~/.ivy2:/root/.ivy2:rw
+        networks:
+          - streaming-data-internal
+        restart: on-failure
+
+    raw-station-paris-saver:
+        build:
+            context: ../RawDataSaver
+            dockerfile: Dockerfile-station-data-PF
+        depends_on:
+          - kafka
+          - station-information-producer
+          - station-status-producer
+          - station-paris-producer
           - hadoop-seed
           - zookeeper-seed
         volumes:

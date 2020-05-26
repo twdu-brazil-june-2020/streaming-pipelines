@@ -47,6 +47,11 @@ $zk_command create /tw/stationDataSF/topic station_data_sf
 $zk_command create /tw/stationDataSF/checkpointLocation /tmp/tw/rawData/stationDataSF/checkpoints
 $zk_command create /tw/stationDataSF/dataLocation /tmp/tw/rawData/stationDataSF/data
 
+$zk_command create /tw/stationDataPF ''
+$zk_command create /tw/stationDataPF/kafkaBrokers 127.0.0.1:9092
+$zk_command create /tw/stationDataPF/topic station_data_pf
+$zk_command create /tw/stationDataPF/checkpointLocation /tmp/tw/rawData/stationDataPF/checkpoints
+$zk_command create /tw/stationDataPF/dataLocation /tmp/tw/rawData/stationDataPF/data
 
 $zk_command create /tw/output ''
 $zk_command create /tw/output/checkpointLocation /tmp/tw/stationMart/checkpoints

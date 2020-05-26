@@ -90,6 +90,7 @@ echo "====Deploy Producers===="
 
 nohup java -jar /tmp/tw-citibike-apis-producer0.1.0.jar --spring.profiles.active=${station_information} --kafka.brokers=kafka.twdu3a-brasil.training:9092 1>/tmp/${station_information}.log 2>/tmp/${station_information}.error.log &
 nohup java -jar /tmp/tw-citibike-apis-producer0.1.0.jar --spring.profiles.active=${station_san_francisco} --producer.topic=station_data_sf --kafka.brokers=kafka.twdu3a-brasil.training:9092 1>/tmp/${station_san_francisco}.log 2>/tmp/${station_san_francisco}.error.log &
+nohup java -jar /tmp/tw-citibike-apis-producer0.1.0.jar --spring.profiles.active=${station_paris} --producer.topic=station_data_pf --kafka.brokers=kafka.twdu3a-brasil.training:9092 1>/tmp/${station_paris}.log 2>/tmp/${station_paris}.error.log &
 nohup java -jar /tmp/tw-citibike-apis-producer0.1.0.jar --spring.profiles.active=${station_status} --kafka.brokers=kafka.twdu3a-brasil.training:9092 1>/tmp/${station_status}.log 2>/tmp/${station_status}.error.log &
 
 echo "====Producers Deployed===="
@@ -125,6 +126,7 @@ echo "====Kill Old Raw Data Saver===="
 kill_application "StationStatusSaverApp"
 kill_application "StationInformationSaverApp"
 kill_application "StationDataSFSaverApp"
+kill_application "StationDataPFSaverApp"
 
 echo "====Old Raw Data Saver Killed===="
 
@@ -135,6 +137,8 @@ nohup spark-submit --master yarn --deploy-mode cluster --class com.tw.apps.Stati
 nohup spark-submit --master yarn --deploy-mode cluster --class com.tw.apps.StationLocationApp --name StationInformationSaverApp --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.3.0 --driver-memory 500M --conf spark.executor.memory=2g --conf spark.cores.max=1 /tmp/tw-raw-data-saver_2.11-0.0.1.jar kafka.twdu3a-brasil.training:2181 "/tw/stationInformation" 1>/tmp/raw-station-information-data-saver.log 2>/tmp/raw-station-information-data-saver.error.log &
 
 nohup spark-submit --master yarn --deploy-mode cluster --class com.tw.apps.StationLocationApp --name StationDataSFSaverApp --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.3.0 --driver-memory 500M --conf spark.executor.memory=2g --conf spark.cores.max=1 /tmp/tw-raw-data-saver_2.11-0.0.1.jar kafka.twdu3a-brasil.training:2181 "/tw/stationDataSF" 1>/tmp/raw-station-data-sf-saver.log 2>/tmp/raw-station-data-sf-saver.error.log &
+
+nohup spark-submit --master yarn --deploy-mode cluster --class com.tw.apps.StationLocationApp --name StationDataPFSaverApp --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.3.0 --driver-memory 500M --conf spark.executor.memory=2g --conf spark.cores.max=1 /tmp/tw-raw-data-saver_2.11-0.0.1.jar kafka.twdu3a-brasil.training:2181 "/tw/stationDataPF" 1>/tmp/raw-station-data-pf-saver.log 2>/tmp/raw-station-data-pf-saver.error.log &
 
 echo "====Raw Data Saver Deployed===="
 '
